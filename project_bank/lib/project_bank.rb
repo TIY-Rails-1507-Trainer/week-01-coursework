@@ -1,36 +1,35 @@
 require_relative 'account'
 require_relative 'bank'
+
+
 current_account = Account.new(100)
 savings_account = Account.new(500)
 user_bank = Bank.new(current_account, savings_account)
 
-loop do
-print "\nHi, which services would you like to use? \n View \e[#{4}mBalance\e[#{0}m \n \e[#{4}mDeposit\e[#{0}m Funds \n \e[#{4}mWithdraw\e[#{0}m Funds \n \e[#{4}mTransfer\e[#{0}m Funds \n \e[#{4}mExit\e[#{0}m\n\n"
-answer = gets.chomp.downcase
-#break if answer == "exit"
+def continue_using_services?
+	print "\nWould you like another service? "
+	response = gets.chomp.downcase
+	response == "y" || response == "yes"
+end
+
+def display_balance(current_account, savings_account)
+	puts "Your current account has #{current_account.balance}."
+	puts "Your savings account has #{savings_account.balance}.\n"
+end	
+
+begin
+	print "\nHi, which services would you like to use? \n View \e[#{4}mBalance\e[#{0}m \n \e[#{4}mDeposit\e[#{0}m Funds \n \e[#{4}mWithdraw\e[#{0}m Funds \n \e[#{4}mTransfer\e[#{0}m Funds \n \e[#{4}mExit\e[#{0}m\n\n"
+	answer = gets.chomp.downcase
 
 	if answer == "balance"
-		puts "\nYour current account has #{current_account.balance}.\nYour savings account has #{savings_account.balance}.\n"
+		display_balance(current_account, savings_account)
 		
-		print "\nWould you like another service? "
-			a2 = gets.chomp.downcase
-			if a2 == "n" || a2 == "no"
-				break
-			else
-			end
-
-	elsif answer == "deposit"
+ 	elsif answer == "deposit"
 		print "\nHow much would you like to deposit in your current account? "
 			dep = gets.chomp.to_i
 			current_account.deposit(dep)
 		puts "\nYour new balance is #{current_account.balance}."
 		
-		print "\nWould you like another service? "
-			a2 = gets.chomp.downcase
-			if a2 == "n" || a2 == "no"
-				break
-			else
-			end	
 
 	elsif answer == "withdraw"
 		print "\nHow much would you like to withdraw from your current account? "
@@ -41,12 +40,6 @@ answer = gets.chomp.downcase
 					puts "\nYour new balance is #{current_account.balance}."
 				end
 		
-		print "\nWould you like another service? "
-			a2 = gets.chomp.downcase
-			if a2 == "n" || a2 == "no"
-				break
-			else
-			end	
 
 	elsif answer == "transfer"
 			print "\nWhich account would you like to transfer \e[#{1}mfrom\e[#{0}m? Your \e[#{4}mcurrent\e[#{0}m or \e[#{4}msavings\e[#{0}m?\n\n"
@@ -72,17 +65,12 @@ answer = gets.chomp.downcase
 			else puts "\nPlease enter a valid account name."
 			end
 
-			print "\nWould you like another service? "
-				a2 = gets.chomp.downcase
-				if a2 == "n" || a2 == "no"
-					break
-				else
-				end
 
 	elsif answer == "exit"
 		break
 		
 	else puts "\nValid commands include Balance, Deposit, Withdraw, Transfer, Exit. Please try again. \n"
 	end
-end
+end while( continue_using_services? )
+
 puts "\nThank you. Goodbye."
